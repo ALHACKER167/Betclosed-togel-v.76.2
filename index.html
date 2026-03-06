@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALHACKER168 • JADWAL TOGEL PREMIUM</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;500;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-dark: #0a0c0f;
+  --bg-panel: #12161b;
+  --bg-card: #1a1f26;
+  --primary: #d4af37;
+  --primary-glow: rgba(212, 175, 55, 0.6);
+  --accent: #00b4d8;
+  --accent-glow: rgba(0, 180, 216, 0.5);
+  --danger: #f95738;
+  --danger-glow: rgba(249, 87, 56, 0.5);
+  --success: #2dc937;
+  --text: #eef4f7;
+  --text-dim: #9aa9b7;
+  --border-light: rgba(255, 255, 255, 0.06);
+  --shadow-card: 0 12px 30px -8px rgba(0,0,0,0.8), 0 0 0 1px rgba(212, 175, 55, 0.1);
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+}
+
+body {
+  background: var(--bg-dark);
+  color: var(--text);
+  font-family: var(--font-main);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* matrix background halus */
+#matrix-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+/* scanline tipis */
+.scanline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 2px, transparent 2px, transparent 4px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+#app {
+  position: relative;
+  z-index: 10;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 20px 32px;
+}
+
+/* header premium */
+.header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.header-badge {
+  display: inline-block;
+  background: rgba(212, 175, 55, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  backdrop-filter: blur(4px);
+  padding: 6px 24px;
+  border-radius: 60px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.header-title {
+  font-size: clamp(32px, 7vw, 62px);
+  font-weight: 800;
+  background: linear-gradient(135deg, #f5e7b2 0%, var(--primary) 50%, #f5e7b2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+  filter: drop-shadow(0 4px 12px rgba(212,175,55,0.3));
+}
+.header-sub {
+  font-size: 18px;
+  color: var(--text-dim);
+  font-weight: 400;
+  margin-top: 6px;
+  letter-spacing: 2px;
+}
+.divider {
+  width: 180px;
+  height: 2px;
+  margin: 18px auto 0;
+  background: linear-gradient(90deg, transparent, var(--primary), var(--accent), var(--primary), transparent);
+}
+
+/* clock panel */
+.clock-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+}
+.clock-card {
+  background: var(--bg-panel);
+  border-radius: 32px;
+  padding: 20px 32px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 18px 30px -12px black, 0 0 0 1px rgba(212,175,55,0.15);
+  backdrop-filter: blur(8px);
+  text-align: center;
+  min-width: 240px;
+}
+.clock-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+.clock-value {
+  font-family: var(--font-mono);
+  font-size: 44px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff 0%, var(--primary) 120%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  filter: drop-shadow(0 0 15px var(--primary-glow));
+}
+.clock-foot {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+}
+.next-close .clock-value {
+  font-size: 36px;
+}
+
+/* status bar premium */
+.status-bar {
+  background: var(--bg-panel);
+  border-radius: 60px;
+  padding: 12px 24px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  border: 1px solid rgba(212,175,55,0.15);
+  box-shadow: 0 8px 20px -8px black;
+}
+.status-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--success);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--success);
+  animation: pulse-green 1.8s infinite;
+}
+.status-text {
+  display: flex;
+  gap: 8px;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+.status-text span {
+  color: var(--text);
+  font-weight: 700;
+}
+.action-btn {
+  background: transparent;
+  border: 1px solid rgba(212,175,55,0.4);
+  border-radius: 40px;
+  padding: 8px 20px;
+  font-family: var(--font-main);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--primary);
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.action-btn:hover {
+  background: rgba(212,175,55,0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 18px rgba(212,175,55,0.2);
+}
+.action-btn.blue {
+  border-color: rgba(0,180,216,0.4);
+  color: var(--accent);
+}
+.action-btn.blue:hover {
+  background: rgba(0,180,216,0.1);
+  border-color: var(--accent);
+}
+
+/* stat premium */
+.stat-grid {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.stat-item {
+  background: var(--bg-panel);
+  border-radius: 28px;
+  padding: 14px 24px;
+  flex: 1 1 140px;
+  border: 1px solid var(--border-light);
+  backdrop-filter: blur(4px);
+}
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #fff 0%, var(--primary) 150%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+}
+
+/* filter bar mewah */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  margin-right: 10px;
+}
+.filter-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 40px;
+  padding: 8px 22px;
+  font-family: var(--font-main);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: rgba(212,175,55,0.08);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.search-input {
+  background: var(--bg-panel);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 40px;
+  padding: 10px 22px;
+  font-family: var(--font-main);
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  width: 240px;
+  margin-left: auto;
+}
+.search-input::placeholder {
+  color: var(--text-dim);
+  font-weight: 300;
+}
+.search-input:focus {
+  border-color: var(--primary);
+}
+
+/* card grid modern */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.card {
+  background: var(--bg-card);
+  border-radius: 32px;
+  padding: 20px;
+  border: 1px solid rgba(212,175,55,0.08);
+  box-shadow: var(--shadow-card);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+}
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 32px;
+  padding: 1px;
+  background: linear-gradient(145deg, rgba(212,175,55,0.3), transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212,175,55,0.2);
+  box-shadow: 0 22px 40px -12px black, 0 0 0 1px rgba(212,175,55,0.3);
+}
+.card.soon {
+  box-shadow: 0 0 0 1px var(--primary), 0 12px 30px -8px black;
+}
+.card.closed {
+  box-shadow: 0 0 0 1px rgba(249,87,56,0.3);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.card-name {
+  font-weight: 700;
+  font-size: 18px;
+  background: linear-gradient(135deg, #fff, var(--primary) 150%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.2px;
+}
+.card-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 40px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: rgba(45, 201, 55, 0.1);
+  border: 1px solid var(--success);
+  color: var(--success);
+}
+.card-badge.closed { background: rgba(249,87,56,0.1); border-color: var(--danger); color: var(--danger); }
+.card-badge.soon { background: rgba(212,175,55,0.1); border-color: var(--primary); color: var(--primary); }
+.card-badge.holiday { background: rgba(128,128,128,0.1); border-color: #888; color: #aaa; } /* badge libur */
+.card-day {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(255,255,255,0.1);
+}
+.time-row {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(0,0,0,0.25);
+  border-radius: 60px;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+}
+.time-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+.time-value {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text);
+}
+.countdown-tip {
+  font-size: 12px;
+  color: var(--primary);
+  text-align: right;
+  font-weight: 600;
+}
+.hoki-special {
+  background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(0,180,216,0.1));
+  border-radius: 18px;
+  padding: 12px;
+  text-align: center;
+  font-weight: 700;
+  border: 1px dashed var(--primary);
+  color: var(--primary);
+}
+
+/* footer */
+.footer {
+  text-align: center;
+  padding: 32px 0 10px;
+  border-top: 1px solid rgba(212,175,55,0.1);
+}
+.footer-logo {
+  font-weight: 800;
+  font-size: 24px;
+  background: linear-gradient(135deg, var(--primary), #fff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 4px;
+}
+.footer-copy {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  margin-top: 10px;
+}
+
+/* modal alarm premium */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(12px);
+  z-index: 10000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.modal-overlay.active { display: flex; }
+.modal-premium {
+  background: var(--bg-panel);
+  border-radius: 48px;
+  max-width: 460px;
+  width: 92%;
+  border: 1px solid rgba(212,175,55,0.3);
+  box-shadow: 0 30px 60px -20px black, 0 0 0 1px var(--primary), 0 0 40px rgba(212,175,55,0.3);
+  overflow: hidden;
+}
+.modal-header {
+  background: linear-gradient(90deg, rgba(212,175,55,0.1), transparent);
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(212,175,55,0.2);
+}
+.modal-header h2 {
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+.modal-time {
+  font-family: var(--font-mono);
+  color: var(--accent);
+}
+.modal-body {
+  padding: 32px 30px;
+  text-align: center;
+}
+.modal-market {
+  font-size: 32px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff, var(--primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+.modal-badge {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--danger);
+  text-shadow: 0 0 20px var(--danger-glow);
+  letter-spacing: 4px;
+  margin: 10px 0;
+}
+.modal-info-grid {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin: 26px 0;
+}
+.modal-info-item {
+  background: rgba(0,0,0,0.3);
+  border-radius: 28px;
+  padding: 12px 22px;
+  border: 1px solid rgba(212,175,55,0.2);
+}
+.modal-info-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+}
+.modal-info-value {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--primary);
+}
+.modal-ok {
+  background: transparent;
+  border: 2px solid var(--primary);
+  border-radius: 60px;
+  padding: 14px 48px;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 16px;
+  letter-spacing: 2px;
+}
+.modal-ok:hover {
+  background: var(--primary);
+  color: black;
+  box-shadow: 0 0 30px var(--primary-glow);
+}
+
+/* queue badge */
+.queue-badge {
+  position: fixed;
+  top: 20px; right: 20px;
+  background: var(--bg-panel);
+  border: 1px solid var(--primary);
+  border-radius: 60px;
+  padding: 8px 22px;
+  font-weight: 700;
+  color: var(--primary);
+  z-index: 200;
+  backdrop-filter: blur(8px);
+  display: none;
+  box-shadow: 0 0 20px rgba(212,175,55,0.3);
+}
+
+/* lightning overlay (dengan awan gelap dan petir) */
+#lightning-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 9999;
+  display: none;
+  pointer-events: none;
+  background: rgba(0,0,0,0.95); /* gelap total */
+}
+#lightning-overlay.active {
+  display: block;
+  pointer-events: all;
+}
+#lightning-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: transparent;
+}
+#steal-modal {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(20,25,30,0.98);
+  backdrop-filter: blur(16px);
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 60px;
+  padding: 40px 48px;
+  text-align: center;
+  box-shadow: 0 0 80px rgba(255,255,255,0.2);
+  z-index: 10001;
+  color: white;
+}
+.steal-icon { font-size: 70px; margin-bottom: 10px; filter: drop-shadow(0 0 20px white); }
+.steal-text1 {
+  font-size: 26px;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 0 18px white;
+}
+.steal-text2 {
+  font-size: 18px;
+  color: #ccc;
+  margin: 16px 0;
+}
+.steal-btn {
+  background: white;
+  border: none;
+  border-radius: 40px;
+  padding: 14px 40px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+  color: black;
+}
+.steal-btn:hover { background: #ddd; box-shadow: 0 0 30px white; }
+
+@keyframes pulse-green {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+/* responsive */
+@media (max-width:600px) {
+  .status-bar { gap: 12px; }
+  .action-btn { margin-left: 0; }
+  .search-input { width: 100%; margin-top: 8px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+<div class="scanline"></div>
+
+<!-- LIGHTNING ANTI-STEAL DENGAN AWAN GELAP -->
+<div id="lightning-overlay">
+  <canvas id="lightning-canvas"></canvas>
+  <div id="steal-modal">
+    <div class="steal-icon">⛈️🌩️⚡</div>
+    <div class="steal-text1">AWAS! ANDA TERDETEKSI</div>
+    <div class="steal-text2">Halaman ini dilindungi · Kembalilah menikmati jadwal</div>
+    <button class="steal-btn" onclick="closeLightning()">TUTUP BADAI</button>
+  </div>
+</div>
+
+<!-- ALARM MODAL PREMIUM -->
+<div id="alarmModal" class="modal-overlay">
+  <div class="modal-premium">
+    <div class="modal-header">
+      <h2>⚠️ BET CLOSE</h2>
+      <span class="modal-time" id="modalTime">--:--:--</span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-market" id="modalMarket">---</div>
+      <div class="modal-badge">TUTUP</div>
+      <div class="modal-info-grid">
+        <div class="modal-info-item"><span class="modal-info-label">TUTUP JAM</span><div class="modal-info-value" id="modalClose">--:--</div></div>
+        <div class="modal-info-item"><span class="modal-info-label">BUKA LAGI</span><div class="modal-info-value" id="modalOpen">--:--</div></div>
+      </div>
+      <button class="modal-ok" onclick="dismissAlarm()">OK</button>
+    </div>
+  </div>
+</div>
+
+<div id="queueBadge" class="queue-badge">▶ ANTRIAN: <span id="queueNum">0</span></div>
+
+<div id="app">
+  <div class="header">
+    <div class="header-badge">OFFICIAL SCHEDULE</div>
+    <div class="header-title">ALHACKER168</div>
+    <div class="header-sub">JADWAL TOGEL · REAL TIME ALARM</div>
+    <div class="divider"></div>
+  </div>
+
+  <!-- CLOCK PREMIUM -->
+  <div class="clock-row">
+    <div class="clock-card">
+      <div class="clock-label">WIB JAKARTA</div>
+      <div class="clock-value" id="clockMain">00:00:00</div>
+      <div class="clock-foot" id="clockDate">---</div>
+    </div>
+    <div class="clock-card next-close">
+      <div class="clock-label">NEXT BET CLOSE</div>
+      <div class="clock-value" id="nextCloseTime">--:--:--</div>
+      <div class="clock-foot" id="nextCloseName">MENGHITUNG...</div>
+    </div>
+  </div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    <div class="status-text">SISTEM <span>AKTIF</span></div>
+    <div class="status-text">| BUKA <span id="statOpen">0</span></div>
+    <div class="status-text">| TUTUP <span id="statClosed">0</span></div>
+    <div class="status-text">| LIBUR <span id="statHoliday">0</span></div>
+    <div class="status-text">| ALARM <span id="statAlarm">0</span></div>
+    <button class="action-btn" onclick="requestNotif()">🔔 NOTIFIKASI</button>
+    <button class="action-btn blue" onclick="testSound(false)">🎧 TEST SUARA</button>
+    <button class="action-btn" onclick="testSound(true)">⚡ TEST HOKI</button>
+  </div>
+
+  <!-- STATISTIK -->
+  <div class="stat-grid">
+    <div class="stat-item"><div class="stat-value" id="totalMarkets">0</div><div class="stat-label">TOTAL</div></div>
+    <div class="stat-item"><div class="stat-value" id="openMarkets">0</div><div class="stat-label">BUKA</div></div>
+    <div class="stat-item"><div class="stat-value" id="closedMarkets">0</div><div class="stat-label">TUTUP</div></div>
+    <div class="stat-item"><div class="stat-value" id="soonMarkets">0</div><div class="stat-label">SEGERA</div></div>
+    <div class="stat-item"><div class="stat-value" id="holidayMarkets">0</div><div class="stat-label">LIBUR</div></div>
+    <div class="stat-item"><div class="stat-value" id="todayAlarm">0</div><div class="stat-label">ALARM</div></div>
+  </div>
+
+  <!-- FILTER + SEARCH -->
+  <div class="filter-bar">
+    <span class="filter-label">FILTER</span>
+    <button class="filter-btn active" onclick="setFilter('all',this)">SEMUA</button>
+    <button class="filter-btn" onclick="setFilter('open',this)">BUKA</button>
+    <button class="filter-btn" onclick="setFilter('closed',this)">TUTUP</button>
+    <button class="filter-btn" onclick="setFilter('soon',this)">SEGERA</button>
+    <button class="filter-btn" onclick="setFilter('holiday',this)">LIBUR</button>
+    <input class="search-input" id="searchInput" placeholder="Cari pasaran..." oninput="renderCards()">
+  </div>
+
+  <!-- CARD GRID -->
+  <div class="card-grid" id="cardGrid"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-logo">ALHACKER168</div>
+    <div class="footer-copy">© 2025 · PREMIUM SCHEDULE · ALL RIGHTS RESERVED</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ---------- DATA PASARAN ----------
+  const DATA = [
+    { n:"HOKIDRAW 5D",      d:"SENIN - MINGGU",       t:null, b:null, hoki:true },
+    { n:"TOTOMACAU PAGI",   d:"SENIN - MINGGU",       t:"00:00", b:"00:15" },
+    { n:"HUAHIN 0100",      d:"SENIN - MINGGU",       t:"00:45", b:"01:00" },
+    { n:"KENTUCKY MIDDAY",  d:"SENIN - MINGGU",       t:"01:05", b:"01:20" },
+    { n:"FLORIDA MIDDAY",   d:"SENIN - MINGGU",       t:"01:20", b:"01:30" },
+    { n:"BANGKOK 0130",     d:"SENIN - MINGGU",       t:"01:15", b:"01:30" },
+    { n:"NEWYORK MIDDAY",   d:"SENIN - MINGGU",       t:"02:15", b:"02:25" },
+    { n:"BRUNEI 02",        d:"SENIN - MINGGU",       t:"02:30", b:"02:45" },
+    { n:"CAROLINA DAY",     d:"SENIN - MINGGU",       t:"02:45", b:"03:00" },
+    { n:"OREGON 03",        d:"SENIN - MINGGU",       t:"03:50", b:"04:00" },
+    { n:"OREGON 06",        d:"SENIN - MINGGU",       t:"06:50", b:"07:00" },
+    { n:"BANGKOK 0930",     d:"SENIN - MINGGU",       t:"09:15", b:"09:30" },
+    { n:"CALIFORNIA",       d:"SENIN - MINGGU",       t:"09:25", b:"09:30" },
+    { n:"FLORIDA EVENING",  d:"SENIN - MINGGU",       t:"09:35", b:"09:45" },
+    { n:"OREGON 09",        d:"SENIN - MINGGU",       t:"09:50", b:"10:00" },
+    { n:"NEWYORK EVENING",  d:"SENIN - MINGGU",       t:"10:25", b:"10:35" },
+    { n:"KENTUCKY EVENING", d:"SENIN - MINGGU",       t:"10:45", b:"11:00" },
+    { n:"TOTO CAMBODIA",    d:"SENIN - MINGGU",       t:"10:45", b:"11:00" },
+    { n:"CHELSEA 11",       d:"SENIN - MINGGU",       t:"11:00", b:"11:15" },
+    { n:"CAROLINA EVENING", d:"SENIN - MINGGU",       t:"11:17", b:"11:22" },
+    { n:"BULLSEYE",         d:"SENIN - MINGGU",       t:"12:00", b:"12:15" },
+    { n:"POIPET 12",        d:"SENIN - MINGGU",       t:"12:15", b:"12:30" },
+    { n:"OREGON 12",        d:"SENIN - MINGGU",       t:"12:50", b:"13:00" },
+    { n:"TOTOMACAU SIANG",  d:"SENIN - MINGGU",       t:"13:00", b:"13:15" },
+    { n:"SYDNEY LOTTO",     d:"SENIN - MINGGU",       t:"13:49", b:"14:05" },
+    { n:"BRUNEI 14",        d:"SENIN - MINGGU",       t:"14:30", b:"14:45" },
+    { n:"CHELSEA 15",       d:"SENIN - MINGGU",       t:"15:00", b:"15:15" },
+    { n:"POIPET 15",        d:"SENIN - MINGGU",       t:"15:15", b:"15:30" },
+    { n:"TOTOMALI 1530",    d:"SENIN - MINGGU",       t:"15:15", b:"15:30" },
+    { n:"TOTOMACAU SORE",   d:"SENIN - MINGGU",       t:"16:00", b:"16:15" },
+    { n:"HUAHIN 1630",      d:"SENIN - MINGGU",       t:"16:15", b:"16:30" },
+    { n:"KINGKONG 4D SORE", d:"SENIN - MINGGU",       t:"17:00", b:"17:15" },
+    { n:"SINGAPORE",        d:"SELASA & JUMAT LIBUR", t:"17:30", b:"17:45" },
+    { n:"MAGNUM4D",         d:"RABU, SABTU & MINGGU", t:"18:10", b:"18:40" },
+    { n:"TOTOMACAU MALAM I",d:"SENIN - MINGGU",       t:"19:00", b:"19:15" },
+    { n:"CHELSEA 19",       d:"SENIN - MINGGU",       t:"19:00", b:"19:15" },
+    { n:"POIPET 19",        d:"SENIN - MINGGU",       t:"19:30", b:"19:45" },
+    { n:"PCSO",             d:"MINGGU LIBUR",         t:"19:50", b:"20:10" },
+    { n:"TOTOMALI 2030",    d:"SENIN - MINGGU",       t:"20:15", b:"20:30" },
+    { n:"HUAHIN 2100",      d:"SENIN - MINGGU",       t:"20:45", b:"21:00" },
+    { n:"CHELSEA 21",       d:"SENIN - MINGGU",       t:"21:00", b:"21:15" },
+    { n:"NEVADA",           d:"SENIN - MINGGU",       t:"21:15", b:"21:30" },
+    { n:"BRUNEI 21",        d:"SENIN - MINGGU",       t:"21:30", b:"21:45" },
+    { n:"TOTOMACAU MALAM II",d:"SENIN - MINGGU",      t:"22:00", b:"22:15" },
+    { n:"POIPET 22",        d:"SENIN - MINGGU",       t:"22:30", b:"22:45" },
+    { n:"HONGKONG LOTTO",   d:"SENIN - MINGGU",       t:"22:59", b:"23:15" },
+    { n:"TOTOMACAU MALAM III",d:"SENIN - MINGGU",     t:"23:00", b:"23:15" },
+    { n:"TOTOMALI 2330",    d:"SENIN - MINGGU",       t:"23:15", b:"23:30" },
+    { n:"KINGKONG 4D MALAM",d:"SENIN - MINGGU",       t:"23:30", b:"23:45" },
+  ];
+
+  // ---------- HELPER ----------
+  const pad = n => n.toString().padStart(2,'0');
+  const toMin = s => { let [h,m]=s.split(':').map(Number); return h*60+m; };
+  const nowMin = () => { let d=new Date(); return d.getHours()*60 + d.getMinutes(); };
+  const nowSec = () => { let d=new Date(); return d.getHours()*3600 + d.getMinutes()*60 + d.getSeconds(); };
+  const DAYS = ['MINGGU','SENIN','SELASA','RABU','KAMIS','JUMAT','SABTU'];
+  const MON = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGS','SEP','OKT','NOV','DES'];
+
+  // Fungsi cek hari buka berdasarkan deskripsi
+  function isTodayOpen(desc, dayIdx) {
+    if (desc.includes('SENIN - MINGGU')) return true;
+    if (desc.includes('SELASA & JUMAT LIBUR')) return dayIdx !== 2 && dayIdx !== 5; // Selasa=2, Jumat=5
+    if (desc.includes('RABU, SABTU & MINGGU')) return dayIdx === 3 || dayIdx === 6 || dayIdx === 0; // Rabu=3, Sabtu=6, Minggu=0
+    if (desc.includes('MINGGU LIBUR')) return dayIdx !== 0; // Minggu=0
+    return true; // default
+  }
+
+  function getStatus(p) {
+    if(p.hoki) return 'open';
+    let now = new Date();
+    let day = now.getDay(); // 0 Minggu - 6 Sabtu
+    if (!isTodayOpen(p.d, day)) return 'holiday'; // tambah status holiday
+
+    let nm = nowMin();
+    let tm = toMin(p.t);
+    let bm = toMin(p.b);
+    let diff = tm - nm;
+    if(diff > 15) return 'open';
+    if(diff > 0) return 'soon';
+    let afterClose = nm - bm;
+    if(afterClose >= 0 && afterClose < 120) return 'open';
+    return 'closed';
+  }
+
+  // ---------- RENDER KARTU MODERN ----------
+  let currentFilter = 'all';
+  function renderCards() {
+    const grid = document.getElementById('cardGrid');
+    const search = document.getElementById('searchInput').value.toUpperCase().trim();
+    grid.innerHTML = '';
+    let nO=0, nC=0, nS=0, nH=0;
+    DATA.forEach(p => {
+      let st = getStatus(p);
+      if(st==='open') nO++;
+      else if(st==='closed') nC++;
+      else if(st==='soon') nS++;
+      else if(st==='holiday') nH++;
+
+      if(currentFilter!=='all' && st!==currentFilter) return;
+      if(search && !p.n.toUpperCase().includes(search)) return;
+
+      let badgeClass = 'open';
+      let badgeText = 'BUKA';
+      if(st==='closed') { badgeClass='closed'; badgeText='TUTUP'; }
+      else if(st==='soon') { badgeClass='soon'; badgeText='SEGERA'; }
+      else if(st==='holiday') { badgeClass='holiday'; badgeText='LIBUR'; }
+
+      let timeHtml = '';
+      if(p.hoki) {
+        timeHtml = `<div class="hoki-special">⚡ SETIAP JAM · RESULT 24x SEHARI</div>`;
+      } else {
+        timeHtml = `
+          <div class="time-row"><span class="time-label">BET CLOSE</span><span class="time-value">${p.t} WIB</span></div>
+          <div class="time-row"><span class="time-label">BUKA LAGI</span><span class="time-value">${p.b} WIB</span></div>
+        `;
+      }
+      let countdown = '';
+      if(!p.hoki && p.t && st !== 'holiday') {
+        let diff = toMin(p.t) - nowMin();
+        if(diff>0 && diff<=60) countdown = `<div class="countdown-tip">⏳ TUTUP ${diff} MENIT LAGI</div>`;
+        else if(diff<=0 && diff>-30) countdown = `<div class="countdown-tip" style="color:var(--danger);">🔴 TUTUP ${Math.abs(diff)} MENIT LALU</div>`;
+      }
+
+      const card = document.createElement('div');
+      card.className = `card ${st}`;
+      card.innerHTML = `
+        <div class="card-header">
+          <span class="card-name">${p.n}</span>
+          <span class="card-badge ${badgeClass}">${badgeText}</span>
+        </div>
+        <div class="card-day">${p.d}</div>
+        ${timeHtml}
+        ${countdown}
+      `;
+      grid.appendChild(card);
+    });
+
+    document.getElementById('statOpen').innerText = nO;
+    document.getElementById('statClosed').innerText = nC;
+    document.getElementById('statHoliday').innerText = nH;
+    document.getElementById('totalMarkets').innerText = DATA.length;
+    document.getElementById('openMarkets').innerText = nO;
+    document.getElementById('closedMarkets').innerText = nC;
+    document.getElementById('soonMarkets').innerText = nS;
+    document.getElementById('holidayMarkets').innerText = nH;
+  }
+
+  window.setFilter = function(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCards();
+  }
+
+  // ---------- CLOCK + NEXT CLOSE (memperhitungkan hari libur) ----------
+  function updateClock() {
+    let d = new Date();
+    document.getElementById('clockMain').innerText = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    document.getElementById('clockDate').innerText = `${DAYS[d.getDay()]}, ${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()}`;
+    document.getElementById('modalTime').innerText = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+
+    // next close (hanya market yang buka hari ini)
+    let ns = nowSec(), nm = Math.floor(ns/60);
+    let best = Infinity, bestName = '', bestTime = '';
+    DATA.forEach(p => {
+      if(p.hoki) {
+        let nxt = ((Math.floor(ns/3600)+1)*3600) - ns;
+        if(nxt < best) { best = nxt; bestName = 'HOKIDRAW 5D'; bestTime = `${pad((Math.floor(ns/3600)+1)%24)}:00`; }
+        return;
+      }
+      if(!p.t) return;
+      let day = d.getDay();
+      if (!isTodayOpen(p.d, day)) return; // skip hari libur
+      let dm = toMin(p.t) - nm; if(dm<=0) dm += 1440;
+      let ds = dm*60 - (ns%60);
+      if(ds>0 && ds<best) { best=ds; bestName=p.n; bestTime=p.t; }
+    });
+    document.getElementById('nextCloseTime').innerText = best<Infinity ? 
+      `${pad(Math.floor(best/3600))}:${pad(Math.floor(best%3600/60))}:${pad(best%60)}` : '--:--:--';
+    document.getElementById('nextCloseName').innerText = bestName ? `${bestName} ${bestTime} WIB` : '---';
+  }
+
+  // ---------- SUARA BANDARA PREMIUM (AIRPORT NOTIFICATION) YANG LEBIH REALISTIS ----------
+  let audioCtx = null;
+  function getAudioCtx() {
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+  async function playAirportChime(isHoki = false) {
+    const ctx = getAudioCtx();
+    if(ctx.state === 'suspended') await ctx.resume();
+    const now = ctx.currentTime;
+
+    if(isHoki) {
+      // Suara megah seperti pengumuman boarding: paduan nada panjang
+      let baseFreq = [440, 554.37, 659.25, 880]; // A4, C#5, E5, A5
+      baseFreq.forEach((f, i) => {
+        let osc = ctx.createOscillator();
+        let gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = f;
+        gain.gain.setValueAtTime(0, now + i*0.25);
+        gain.gain.linearRampToValueAtTime(0.15, now + i*0.25 + 0.2);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i*0.25 + 1.5);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now + i*0.25);
+        osc.stop(now + i*0.25 + 1.8);
+      });
+      // tambahkan harmoni rendah
+      let oscLow = ctx.createOscillator();
+      let gainLow = ctx.createGain();
+      oscLow.type = 'triangle';
+      oscLow.frequency.value = 220; // A3
+      gainLow.gain.setValueAtTime(0, now);
+      gainLow.gain.linearRampToValueAtTime(0.08, now + 0.3);
+      gainLow.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
+      oscLow.connect(gainLow).connect(ctx.destination);
+      oscLow.start(now);
+      oscLow.stop(now + 2.5);
+    } else {
+      // Suara "ding dong" khas bandara internasional (nada panjang, reverb ringan)
+      // Nada pertama: 880 Hz (A5) selama 0.8 detik
+      let osc1 = ctx.createOscillator();
+      let gain1 = ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.value = 880;
+      gain1.gain.setValueAtTime(0, now);
+      gain1.gain.linearRampToValueAtTime(0.2, now + 0.1);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+      osc1.connect(gain1).connect(ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 1.2);
+
+      // Nada kedua: 659.25 Hz (E5) mulai 0.4 detik kemudian, lebih panjang
+      let osc2 = ctx.createOscillator();
+      let gain2 = ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.value = 659.25;
+      gain2.gain.setValueAtTime(0, now + 0.4);
+      gain2.gain.linearRampToValueAtTime(0.2, now + 0.55);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
+      osc2.connect(gain2).connect(ctx.destination);
+      osc2.start(now + 0.4);
+      osc2.stop(now + 1.8);
+
+      // Efek gema (delay sederhana)
+      let delay = ctx.createDelay(1.0);
+      delay.delayTime.value = 0.3;
+      let feedback = ctx.createGain();
+      feedback.gain.value = 0.3;
+      gain1.connect(delay);
+      gain2.connect(delay);
+      delay.connect(feedback);
+      feedback.connect(delay);
+      feedback.connect(ctx.destination);
+    }
+  }
+
+  window.testSound = function(hoki) { playAirportChime(hoki); };
+
+  // ---------- ALARM QUEUE + LOCALSTORAGE ----------
+  let firedSet = new Set();
+  let alarmCount = 0;
+  let queue = [];
+  let showingAlarm = false;
+  let alarmLoopInterval = null;
+  let alarmIsHoki = false;
+
+  function dayKey() { let d=new Date(); return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; }
+  function aKey(name,t) { return `${dayKey()}-${name}-${t}`; }
+
+  function loadState() {
+    try {
+      let raw = localStorage.getItem('ah168_premium');
+      if(!raw) return;
+      let s = JSON.parse(raw);
+      if(s.day === dayKey()) {
+        firedSet = new Set(s.fired || []);
+        alarmCount = s.count || 0;
+      }
+    } catch(e) {}
+  }
+  function saveState() {
+    try {
+      localStorage.setItem('ah168_premium', JSON.stringify({
+        fired: [...firedSet],
+        count: alarmCount,
+        day: dayKey()
+      }));
+    } catch(e) {}
+  }
+  loadState();
+  document.getElementById('statAlarm').innerText = alarmCount;
+  document.getElementById('todayAlarm').innerText = alarmCount;
+
+  function enqueue(name,t,b) {
+    let k = aKey(name,t);
+    if(firedSet.has(k)) return;
+    firedSet.add(k);
+    alarmCount++;
+    saveState();
+    document.getElementById('statAlarm').innerText = alarmCount;
+    document.getElementById('todayAlarm').innerText = alarmCount;
+    queue.push({name,t,b});
+    updateQueueBadge();
+    if(!showingAlarm) showNextAlarm();
+    // notifikasi web
+    if(Notification.permission === 'granted') {
+      new Notification('⚠️ BET CLOSE', { body: `${name} tutup pukul ${t} WIB`, requireInteraction: true });
+    }
+  }
+
+  function showNextAlarm() {
+    if(!queue.length) { showingAlarm = false; return; }
+    showingAlarm = true;
+    let a = queue[0];
+    document.getElementById('modalMarket').innerText = a.name;
+    document.getElementById('modalClose').innerText = a.t + ' WIB';
+    document.getElementById('modalOpen').innerText = a.b + ' WIB';
+    document.getElementById('alarmModal').classList.add('active');
+    alarmIsHoki = (a.name === 'HOKIDRAW 5D');
+    playAirportChime(alarmIsHoki);
+    // loop suara setiap 8 detik
+    if(alarmLoopInterval) clearInterval(alarmLoopInterval);
+    alarmLoopInterval = setInterval(() => { playAirportChime(alarmIsHoki); }, 8200);
+    // flash title
+    let flash = setInterval(() => {
+      document.title = document.title.includes('⚠️') ? 'ALHACKER168' : `⚠️ ${a.name}`;
+    }, 900);
+    window._flashTitle = flash;
+  }
+
+  window.dismissAlarm = function() {
+    queue.shift();
+    document.getElementById('alarmModal').classList.remove('active');
+    if(alarmLoopInterval) clearInterval(alarmLoopInterval);
+    if(window._flashTitle) clearInterval(window._flashTitle);
+    document.title = 'ALHACKER168 • JADWAL TOGEL PREMIUM';
+    updateQueueBadge();
+    if(queue.length) showNextAlarm(); else showingAlarm = false;
+    renderCards();
+  }
+
+  function updateQueueBadge() {
+    let qlen = queue.length;
+    document.getElementById('queueNum').innerText = qlen;
+    document.getElementById('queueBadge').style.display = qlen > 1 ? 'block' : 'none';
+  }
+
+  // cek alarm tiap detik (lebih presisi)
+  let lastCheckedMin = -1;
+  function checkAlarms() {
+    let now = new Date();
+    let nm = now.getHours()*60 + now.getMinutes();
+    let sec = now.getSeconds();
+    if(nm === lastCheckedMin) return;
+    if(sec > 35) return; // cek di awal menit
+    lastCheckedMin = nm;
+
+    DATA.forEach(p => {
+      if(p.hoki) {
+        if(now.getMinutes() === 0) {
+          let hh = pad(now.getHours());
+          let nhh = pad((now.getHours()+1)%24);
+          enqueue('HOKIDRAW 5D', `${hh}:00`, `${nhh}:00`);
+        }
+        return;
+      }
+      if(!p.t) return;
+      // hanya market yang buka hari ini yang bisa trigger alarm
+      if (!isTodayOpen(p.d, now.getDay())) return;
+      if(toMin(p.t) === nm) {
+        enqueue(p.n, p.t, p.b);
+      }
+    });
+  }
+
+  // missed alarm saat buka halaman
+  function checkMissed() {
+    let now = new Date();
+    let nm = now.getHours()*60 + now.getMinutes();
+    DATA.forEach(p => {
+      if(p.hoki || !p.t) return;
+      if (!isTodayOpen(p.d, now.getDay())) return;
+      let tm = toMin(p.t);
+      let diff = nm - tm;
+      if(diff > 0 && diff <= 5) {
+        let k = aKey(p.n, p.t);
+        if(!firedSet.has(k)) enqueue(p.n, p.t, p.b);
+      }
+    });
+  }
+
+  // ---------- NOTIF PERMISSION ----------
+  window.requestNotif = function() {
+    if(Notification.permission === 'granted') alert('Notifikasi sudah aktif');
+    else if(Notification.permission !== 'denied') Notification.requestPermission();
+  };
+
+  // ---------- LIGHTNING ANTI-STEAL DENGAN AWAN GELAP DAN PETIR MEMENUHI LAYAR ----------
+  const overlay = document.getElementById('lightning-overlay');
+  const lCanvas = document.getElementById('lightning-canvas');
+  const lCtx = lCanvas.getContext('2d');
+  let animFrame = null;
+  let cloudOffset = 0;
+  function resizeCanvas() { lCanvas.width = window.innerWidth; lCanvas.height = window.innerHeight; }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  // Partikel awan
+  let clouds = [];
+  function initClouds() {
+    for (let i = 0; i < 30; i++) {
+      clouds.push({
+        x: Math.random() * lCanvas.width,
+        y: Math.random() * lCanvas.height * 0.6,
+        radius: 50 + Math.random() * 100,
+        speed: 0.2 + Math.random() * 0.5,
+        gray: 20 + Math.random() * 30
+      });
+    }
+  }
+  initClouds();
+
+  function drawLightning() {
+    lCtx.clearRect(0,0,lCanvas.width,lCanvas.height);
+    
+    // Latar belakang gelap total
+    lCtx.fillStyle = '#030405';
+    lCtx.fillRect(0,0,lCanvas.width,lCanvas.height);
+
+    // Gambar awan gelap bergerak
+    cloudOffset = (cloudOffset + 0.2) % lCanvas.width;
+    lCtx.shadowColor = 'transparent';
+    clouds.forEach(c => {
+      let x = (c.x + cloudOffset * c.speed) % (lCanvas.width + 200) - 100;
+      let gradient = lCtx.createRadialGradient(x, c.y, 10, x, c.y, c.radius);
+      gradient.addColorStop(0, `rgba(40,40,50,0.8)`);
+      gradient.addColorStop(1, `rgba(10,10,15,0.3)`);
+      lCtx.fillStyle = gradient;
+      lCtx.beginPath();
+      lCtx.arc(x, c.y, c.radius, 0, Math.PI*2);
+      lCtx.fill();
+    });
+
+    // Petir putih bersih
+    lCtx.shadowColor = 'white';
+    lCtx.shadowBlur = 40;
+    lCtx.lineWidth = 4;
+    // Petir utama beberapa cabang
+    for(let b=0; b<5; b++) {
+      let startX = 100 + Math.random()*(lCanvas.width-200);
+      let startY = 20;
+      let points = [{x:startX, y:startY}];
+      let x=startX, y=startY;
+      while(y < lCanvas.height * 0.9) {
+        x += (Math.random()-0.5)*120;
+        y += 40 + Math.random()*80;
+        points.push({x,y});
+      }
+      lCtx.beginPath();
+      lCtx.moveTo(points[0].x, points[0].y);
+      for(let i=1; i<points.length; i++) {
+        lCtx.lineTo(points[i].x, points[i].y);
+      }
+      lCtx.strokeStyle = `rgba(255,255,255,${0.7+Math.random()*0.3})`;
+      lCtx.lineWidth = 2+Math.random()*5;
+      lCtx.stroke();
+    }
+    // Kilatan layar (flash putih sesaat)
+    lCtx.fillStyle = `rgba(255,255,255,${Math.random()*0.2})`;
+    lCtx.fillRect(0,0,lCanvas.width,lCanvas.height);
+
+    // Reset shadow
+    lCtx.shadowBlur = 0;
+  }
+
+  function startLightning() {
+    overlay.classList.add('active');
+    function frame() {
+      drawLightning();
+      animFrame = requestAnimationFrame(frame);
+    }
+    frame();
+    // Suara petir (gunakan suara bandara yang dalam)
+    try { 
+      playAirportChime(false); 
+      // tambahkan suara gemuruh dengan oscillator low frequency
+      const ctx = getAudioCtx();
+      let osc = ctx.createOscillator();
+      let gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.value = 60;
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 1.5);
+    } catch(e) {}
+  }
+
+  window.closeLightning = function() {
+    overlay.classList.remove('active');
+    if(animFrame) cancelAnimationFrame(animFrame);
+    lCtx.clearRect(0,0,lCanvas.width,lCanvas.height);
+  };
+
+  // trigger anti-steal
+  document.addEventListener('contextmenu', (e) => { e.preventDefault(); startLightning(); });
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','C','J'].includes(e.key)) || (e.ctrlKey && ['U','S'].includes(e.key))) {
+      e.preventDefault(); startLightning();
+    }
+  });
+
+  // ---------- MATRIX BACKGROUND HALUS ----------
+  const mCanvas = document.getElementById('matrix-canvas');
+  const mCtx = mCanvas.getContext('2d');
+  function resizeMatrix() { mCanvas.width = window.innerWidth; mCanvas.height = window.innerHeight; }
+  window.addEventListener('resize', resizeMatrix);
+  resizeMatrix();
+  const chars = '01アイウエオカキクケコサシスセソ';
+  const fontSize = 16;
+  const columns = Math.floor(mCanvas.width/fontSize);
+  let drops = Array(columns).fill(1);
+  function drawMatrix() {
+    mCtx.fillStyle = 'rgba(10,12,15,0.05)';
+    mCtx.fillRect(0,0,mCanvas.width,mCanvas.height);
+    mCtx.fillStyle = '#d4af37';
+    mCtx.font = `bold ${fontSize}px 'Space Grotesk', monospace`;
+    for(let i=0;i<drops.length;i++) {
+      let text = chars[Math.floor(Math.random()*chars.length)];
+      mCtx.fillText(text, i*fontSize, drops[i]*fontSize);
+      if(drops[i]*fontSize > mCanvas.height && Math.random()>0.975) drops[i]=0;
+      drops[i]++;
+    }
+    requestAnimationFrame(drawMatrix);
+  }
+  drawMatrix();
+
+  // ---------- INIT ----------
+  renderCards();
+  checkMissed();
+  setInterval(updateClock, 500);
+  setInterval(checkAlarms, 1000);
+  updateClock();
+
+  // unlock audio on first click
+  document.addEventListener('click', () => { if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); });
+})();
+</script>
+</body>
+</html>
